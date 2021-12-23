@@ -1,3 +1,4 @@
+// store exposes interfaces and singleton store where hashes are stored and read.
 package store
 
 import (
@@ -10,7 +11,7 @@ import (
 	"time"
 )
 
-// Store supports aadding ang getting of paassword Hash
+// Store supports adding and getting of password Hash
 type Store interface {
 	// AddPwd returns a new id and adds password hash after a defay of preconfigured duration
 	AddPwd(pwd []byte, wg *sync.WaitGroup) int64
@@ -22,19 +23,23 @@ func GetStore() Store {
 	return &internal
 }
 
+// Internal Types and implementations and Values
 
 
-// Singleton vale of internal store
+// Singleton value of internal store
 var internal = pwdStore{}
 
-// Internal Types
+// Internal type (subject to change)
 type pwdHash struct {
+	// TODO salt is not the current requirement, but a cheap way to mitigate Rainbow table attacks
 	salt []byte
+	// storing algo along with the data helps in move to a new algo in phases.
 	algo string
 	hash string
 }
 
 type pwdStore struct {
+	// Assumtion count will not go beyond 2^63 -1
 	id      int64
 	safeMap sync.Map
 	Store

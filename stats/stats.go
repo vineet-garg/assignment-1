@@ -1,10 +1,11 @@
+// stats exposes interface and singelton store where stats can be stored and read from.
 package stats
 
 import (
 	"sync"
 	"time"
 )
-// Stats supports updaing and getting of stats
+// Stats supports updating and getting of stats
 type Stats interface {
 	Update(d time.Duration)
 	Get() (int64, int64)
@@ -17,11 +18,10 @@ func GetStatsStore() Stats {
 
 
 
-
 // Singleton vale of internal store
 var internal = statsStore{}
 
-// Internal Types
+// Internal Types and implementations
 type statsStore struct {
 	sync.RWMutex
 	count   int64
@@ -40,5 +40,8 @@ func (s *statsStore) Get() (int64, int64) {
 	s.RLock()
 	defer s.RUnlock()
 	micro := s.latency.Microseconds()
+	if s.count == 0 {
+		return 0, 0
+	}
 	return s.count, micro / int64(s.count)
 }

@@ -25,7 +25,8 @@ var statsGet = regexp.MustCompile("^/stats$")
 var shutDownPost = regexp.MustCompile("^/shutdown$")
 
 var srv = http.Server{
-	Addr:    config.Adddr,
+	// TODO SHIFT to HTTPS in production
+	Addr:    config.Addr,
 	Handler: hashAPIHandler{},
 }
 
@@ -61,6 +62,7 @@ func (h hashAPIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case "POST":
 			if err := r.ParseForm(); err != nil {
+				log.Printf("Error : %v", err)
 				http.Error(w, "400 Bad Request.", http.StatusBadRequest)
 				return
 			}
@@ -70,7 +72,7 @@ func (h hashAPIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			// TODO MUST validate the input size
+			// TODO MUST validate the input size to mitigate DOS and bufferoverflow attacks.
 
 			var id int64
 			start := time.Now()
