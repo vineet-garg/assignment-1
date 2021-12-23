@@ -3,7 +3,7 @@
 Setup:
 1. Create a directory 
 ```
-mddir -p $HOME/go/src/github.com/vineet-garg
+mkdir -p $HOME/go/src/github.com/vineet-garg
 cd $HOME/go/src/github.com/vineet-garg 
 ```
 

@@ -150,7 +150,7 @@ func main() {
 		}
 		close(idleConnsClosed)
 	}()
-	log.Printf("starting server")
+	log.Printf("starting server at localhost:8080")
 	if err := srv.ListenAndServe(); err != http.ErrServerClosed {
 		log.Fatalf("HTTP server ListenAndServe: %v", err)
 	}
